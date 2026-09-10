@@ -1,0 +1,69 @@
+{
+  "$schema": "https://aka.ms/dsc/schemas/v3/bundled/resource/manifest.json",
+  "type": "AstroStack/AstapConfig",
+  "version": "0.1.0",
+  "description": "Audits an allow-listed subset of the per-user ASTAP configuration.",
+  "tags": [ "astrophotography", "astap" ],
+  "get": {
+    "executable": "pwsh",
+    "args": [
+      "-NoLogo",
+      "-NonInteractive",
+      "-NoProfile",
+      "-ExecutionPolicy", "Bypass",
+      "-File", "./AstapConfig.resource.ps1",
+      "get"
+    ],
+    "input": "stdin"
+  },
+  "test": {
+    "executable": "pwsh",
+    "args": [
+      "-NoLogo",
+      "-NonInteractive",
+      "-NoProfile",
+      "-ExecutionPolicy", "Bypass",
+      "-File", "./AstapConfig.resource.ps1",
+      "test"
+    ],
+    "input": "stdin",
+    "return": "state"
+  },
+  "schema": {
+    "embedded": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "type": "object",
+      "required": [ "ConfigPath", "Settings" ],
+      "additionalProperties": false,
+      "properties": {
+        "ConfigPath": {
+          "type": "string",
+          "description": "Path to the current user's astap.cfg."
+        },
+        "ExecutablePath": {
+          "type": [ "string", "null" ],
+          "description": "Optional ASTAP executable whose presence is included in compliance."
+        },
+        "ExecutableExists": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "Settings": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": [ "string", "null" ]
+          }
+        },
+        "InDesiredState": {
+          "type": "boolean",
+          "readOnly": true
+        }
+      }
+    }
+  },
+  "exitCodes": {
+    "0": "Success",
+    "1": "Error - see stderr for detail"
+  }
+}

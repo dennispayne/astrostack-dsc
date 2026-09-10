@@ -8,6 +8,7 @@ DSC v3 configuration for auditing and maintaining the software, datasets, and NI
 - `config/modules/` contains generated DSC configuration documents grouped into swappable modules.
 - `config/astro-stack.dsc.config.json` composes those modules with `Microsoft.DSC/Include`.
 - `resources/AstroComponent/` implements installation and version-state discovery/remediation.
+- `resources/AstapConfig/` is the first specialized application-config resource and currently audits allow-listed ASTAP settings.
 - `scripts/Generate-DscConfig.ps1` regenerates module and aggregate configuration documents.
 - `scripts/Test-Compliance.ps1` prepares DSC resource discovery, regenerates the configuration, and runs the complete compliance check.
 
@@ -47,6 +48,12 @@ DSC configuration documents are declarative inputs, so testing is layered:
 - **Remediation tests** should use disposable fixtures or a test VM before running `dsc config set` against live application configuration.
 
 Pester is appropriate for the PowerShell resource logic and generator. It does not replace DSC's own schema validation or live compliance tests.
+
+Run the current unit tests with:
+
+```powershell
+Invoke-Pester .\tests
+```
 
 ## Managed paths
 

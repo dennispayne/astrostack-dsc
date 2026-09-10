@@ -17,8 +17,11 @@ $ErrorActionPreference = 'Stop'
 $dscCommand = Get-Command dsc -ErrorAction Stop
 $pwshCommand = Get-Command pwsh -ErrorAction Stop
 $pwshDirectory = Split-Path $pwshCommand.Source -Parent
-$resourceDirectory = Join-Path $RepoRoot 'resources\AstroComponent'
-$windowsPowerShellDirectory = Join-Path $env:WINDIR 'System32\WindowsPowerShell\v1.0'
+$resourceDirectories = Get-ChildItem -Path (Join-Path $RepoRoot 'resources') -Directory |
+    Where-Object {
+        Get-ChildItem -Path $_.FullName -Filter '*.dsc.resource.json' -File -ErrorAction SilentlyContinue
+    } |
+    Select-Object -ExpandProperty FullName
 $dscPackage = Get-AppxPackage -Name Microsoft.DesiredStateConfiguration |
     Sort-Object Version -Descending |
     Select-Object -First 1
@@ -27,9 +30,8 @@ if (-not $dscPackage.InstallLocation) {
 }
 
 $env:DSC_RESOURCE_PATH = @(
-    $resourceDirectory
+    $resourceDirectories
     $pwshDirectory
-    $windowsPowerShellDirectory
     $dscPackage.InstallLocation
 ) -join [IO.Path]::PathSeparator
 
