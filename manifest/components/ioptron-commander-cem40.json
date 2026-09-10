@@ -1,0 +1,13 @@
+{
+  "id": "ioptron-commander-cem40",
+  "kind": "Application",
+  "module": "mount",
+  "displayName": "iOptron Commander and ASCOM Driver 9.2.0.1",
+  "versionSource": "DisplayVersion",
+  "expectedVersion": "9.2.0.1",
+  "downloadUrl": null,
+  "downloadFileName": "iOptron_Commander_ASCOM_9.2.0.1.exe",
+  "silentInstallArgs": ["/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART"],
+  "verified": false,
+  "notes": "ioptron.com is a JS-rendered Volusion storefront; could not confirm a static direct-download URL via HTTP fetch. Needs manual browser download or a headless-browser-based updater."
+}

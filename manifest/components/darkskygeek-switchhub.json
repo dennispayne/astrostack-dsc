@@ -1,0 +1,13 @@
+{
+  "id": "darkskygeek-switchhub",
+  "kind": "Application",
+  "module": "power-switch",
+  "displayName": "Dark Sky Geek's ASCOM Switch Hub version 1.1.1",
+  "versionSource": "DisplayVersion",
+  "expectedVersion": "1.1.1",
+  "downloadUrl": "https://github.com/jlecomte/ascom-switch-hub/releases/download/v1.1.1/Dark.Sky.Geek.ASCOM.Switch.Hub.Setup-1.1.1.exe",
+  "downloadFileName": "Dark.Sky.Geek.ASCOM.Switch.Hub.Setup-1.1.1.exe",
+  "silentInstallArgs": ["/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART"],
+  "verified": true,
+  "notes": "Confirmed - installed with this exact URL/args on 2026-09-09."
+}

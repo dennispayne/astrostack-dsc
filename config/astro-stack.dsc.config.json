@@ -5,153 +5,73 @@
   },
   "resources": [
     {
-      "name": "Application: nina",
-      "type": "AstroStack/Component",
+      "name": "Module: astap",
+      "type": "Microsoft.DSC/Include",
       "properties": {
-        "Id": "nina",
-        "Kind": "Application",
-        "ManifestPath": "C:/Users/dennis/AstroStack-DSC/manifest/astro-stack.manifest.json",
-        "InDesiredState": true
+        "configurationFile": "modules/astap.dsc.config.json"
       }
     },
     {
-      "name": "Application: ascom-platform",
-      "type": "AstroStack/Component",
+      "name": "Module: focuser",
+      "type": "Microsoft.DSC/Include",
       "properties": {
-        "Id": "ascom-platform",
-        "Kind": "Application",
-        "ManifestPath": "C:/Users/dennis/AstroStack-DSC/manifest/astro-stack.manifest.json",
-        "InDesiredState": true
+        "configurationFile": "modules/focuser.dsc.config.json"
       }
     },
     {
-      "name": "Application: phd2",
-      "type": "AstroStack/Component",
+      "name": "Module: guiding",
+      "type": "Microsoft.DSC/Include",
       "properties": {
-        "Id": "phd2",
-        "Kind": "Application",
-        "ManifestPath": "C:/Users/dennis/AstroStack-DSC/manifest/astro-stack.manifest.json",
-        "InDesiredState": true
+        "configurationFile": "modules/guiding.dsc.config.json"
       }
     },
     {
-      "name": "Application: sharpcap",
-      "type": "AstroStack/Component",
+      "name": "Module: imaging-app",
+      "type": "Microsoft.DSC/Include",
       "properties": {
-        "Id": "sharpcap",
-        "Kind": "Application",
-        "ManifestPath": "C:/Users/dennis/AstroStack-DSC/manifest/astro-stack.manifest.json",
-        "InDesiredState": true
+        "configurationFile": "modules/imaging-app.dsc.config.json"
       }
     },
     {
-      "name": "Application: ioptron-commander-cem40",
-      "type": "AstroStack/Component",
+      "name": "Module: misc-ascom",
+      "type": "Microsoft.DSC/Include",
       "properties": {
-        "Id": "ioptron-commander-cem40",
-        "Kind": "Application",
-        "ManifestPath": "C:/Users/dennis/AstroStack-DSC/manifest/astro-stack.manifest.json",
-        "InDesiredState": true
+        "configurationFile": "modules/misc-ascom.dsc.config.json"
       }
     },
     {
-      "name": "Application: ioptron-iguider",
-      "type": "AstroStack/Component",
+      "name": "Module: mount",
+      "type": "Microsoft.DSC/Include",
       "properties": {
-        "Id": "ioptron-iguider",
-        "Kind": "Application",
-        "ManifestPath": "C:/Users/dennis/AstroStack-DSC/manifest/astro-stack.manifest.json",
-        "InDesiredState": true
+        "configurationFile": "modules/mount.dsc.config.json"
       }
     },
     {
-      "name": "Application: ioptron-ipolar",
-      "type": "AstroStack/Component",
+      "name": "Module: platform",
+      "type": "Microsoft.DSC/Include",
       "properties": {
-        "Id": "ioptron-ipolar",
-        "Kind": "Application",
-        "ManifestPath": "C:/Users/dennis/AstroStack-DSC/manifest/astro-stack.manifest.json",
-        "InDesiredState": true
+        "configurationFile": "modules/platform.dsc.config.json"
       }
     },
     {
-      "name": "Application: ascom-ogmavision",
-      "type": "AstroStack/Component",
+      "name": "Module: polar-alignment",
+      "type": "Microsoft.DSC/Include",
       "properties": {
-        "Id": "ascom-ogmavision",
-        "Kind": "Application",
-        "ManifestPath": "C:/Users/dennis/AstroStack-DSC/manifest/astro-stack.manifest.json",
-        "InDesiredState": true
+        "configurationFile": "modules/polar-alignment.dsc.config.json"
       }
     },
     {
-      "name": "Application: ascom-qfoc-focuser",
-      "type": "AstroStack/Component",
+      "name": "Module: power-switch",
+      "type": "Microsoft.DSC/Include",
       "properties": {
-        "Id": "ascom-qfoc-focuser",
-        "Kind": "Application",
-        "ManifestPath": "C:/Users/dennis/AstroStack-DSC/manifest/astro-stack.manifest.json",
-        "InDesiredState": true
+        "configurationFile": "modules/power-switch.dsc.config.json"
       }
     },
     {
-      "name": "Application: darkskygeek-switchhub",
-      "type": "AstroStack/Component",
+      "name": "Module: secondary-capture",
+      "type": "Microsoft.DSC/Include",
       "properties": {
-        "Id": "darkskygeek-switchhub",
-        "Kind": "Application",
-        "ManifestPath": "C:/Users/dennis/AstroStack-DSC/manifest/astro-stack.manifest.json",
-        "InDesiredState": true
-      }
-    },
-    {
-      "name": "Dataset: astap",
-      "type": "AstroStack/Component",
-      "properties": {
-        "Id": "astap",
-        "Kind": "Dataset",
-        "ManifestPath": "C:/Users/dennis/AstroStack-DSC/manifest/astro-stack.manifest.json",
-        "InDesiredState": true
-      }
-    },
-    {
-      "name": "Dataset: astap-db-d50",
-      "type": "AstroStack/Component",
-      "properties": {
-        "Id": "astap-db-d50",
-        "Kind": "Dataset",
-        "ManifestPath": "C:/Users/dennis/AstroStack-DSC/manifest/astro-stack.manifest.json",
-        "InDesiredState": true
-      }
-    },
-    {
-      "name": "Dataset: astap-db-h18",
-      "type": "AstroStack/Component",
-      "properties": {
-        "Id": "astap-db-h18",
-        "Kind": "Dataset",
-        "ManifestPath": "C:/Users/dennis/AstroStack-DSC/manifest/astro-stack.manifest.json",
-        "InDesiredState": true
-      }
-    },
-    {
-      "name": "Dataset: astap-db-w08",
-      "type": "AstroStack/Component",
-      "properties": {
-        "Id": "astap-db-w08",
-        "Kind": "Dataset",
-        "ManifestPath": "C:/Users/dennis/AstroStack-DSC/manifest/astro-stack.manifest.json",
-        "InDesiredState": true
-      }
-    },
-    {
-      "name": "NINA plugins (pinned set)",
-      "type": "AstroStack/Component",
-      "properties": {
-        "Id": "nina-plugins",
-        "Kind": "NinaPlugin",
-        "ManifestPath": "C:/Users/dennis/AstroStack-DSC/manifest/astro-stack.manifest.json",
-        "InDesiredState": true
+        "configurationFile": "modules/secondary-capture.dsc.config.json"
       }
     }
   ]

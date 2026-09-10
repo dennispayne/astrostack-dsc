@@ -1,0 +1,15 @@
+{
+  "id": "astap-db-d50",
+  "kind": "Dataset",
+  "module": "astap",
+  "displayName": "ASTAP D50 star database. v2022-03-15",
+  "versionSource": "DisplayNameRegex",
+  "versionRegex": "v(\\d{4}-\\d{2}-\\d{2})",
+  "expectedVersion": "2022-03-15",
+  "checkPath": "C:\\Program Files\\astap\\d50_*",
+  "versionStrategy": "PathExists",
+  "downloadUrl": "https://sourceforge.net/projects/astap-program/files/star_databases/d50_star_database.exe/download",
+  "downloadFileName": "d50_star_database.exe",
+  "silentInstallArgs": ["/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART"],
+  "verified": true
+}

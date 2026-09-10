@@ -2,7 +2,7 @@
     "$schema": "https://aka.ms/dsc/schemas/v3/bundled/resource/manifest.json",
     "type": "AstroStack/Component",
     "version": "0.1.0",
-    "description": "Tracks a single astrophotography stack component (Application, Dataset, or the pinned NinaPlugin set) against astro-stack.manifest.json.",
+    "description": "Tracks a single astrophotography stack component (Application, Dataset, or the pinned NinaPlugin set) against a single component file under manifest/components/*.json.",
     "tags": [ "astrophotography", "astropc" ],
     "get": {
         "executable": "pwsh",
@@ -46,13 +46,11 @@
         "embedded": {
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "object",
-            "required": [ "Id", "Kind", "ManifestPath" ],
+            "required": [ "ManifestPath" ],
             "additionalProperties": true,
             "properties": {
-                "Id": { "type": "string", "description": "Manifest entry id to check/enforce." },
-                "Kind": { "type": "string", "enum": [ "Application", "Dataset", "NinaPlugin" ] },
-                "ManifestPath": { "type": "string", "description": "Path to astro-stack.manifest.json." },
-                "AutoDeployPlugins": { "type": "boolean", "description": "Only used for Kind=NinaPlugin; opt-in unofficial auto-deploy of cached plugin archives." },
+                "ManifestPath": { "type": "string", "description": "Path to a single component file under manifest/components/*.json." },
+                "DownloadsRoot": { "type": "string", "description": "Cache root for installers/datasets/plugin archives, required for Set. Not part of this repo - point it at a folder outside source control." },
                 "InDesiredState": { "type": "boolean", "readOnly": true }
             }
         }

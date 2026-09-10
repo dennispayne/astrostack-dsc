@@ -1,25 +1,22 @@
 #requires -Version 7.0
 <#
 .SYNOPSIS
-    Remediation logic for AstroStack/Component 'set'. Downloads installers into the maintained
+    Remediation logic for AstroStack/Component 'set'. Downloads installers into a caller-supplied
     Downloads cache (verifying checksum when available) and runs them silently for Application/Dataset
-    components. For NinaPlugin, only caches verified plugin archives by default; will not touch NINA's
-    live Plugins folder unless AutoDeployPlugins=true AND NINA is confirmed not running.
+    components. NinaPlugin remediation is intentionally unsupported until a verified deployment
+    mechanism is implemented.
+.PARAMETER DownloadsRoot
+    Root folder for the installer/dataset/plugin cache. Not part of this repo - supply a path outside
+    source control (e.g. via the DSC instance's DownloadsRoot property). Applications and Datasets
+    subfolders are created under it on demand.
 #>
 param(
-    [Parameter(Mandatory)] $Instance
+    [Parameter(Mandatory)] $Instance,
+    [Parameter(Mandatory)] [string]$DownloadsRoot
 )
 
 $ErrorActionPreference = 'Stop'
-$root = (Resolve-Path "$PSScriptRoot\..\..").Path
-$downloadsApps = Join-Path $root 'Downloads\Applications'
-$downloadsData = Join-Path $root 'Downloads\Datasets'
-$downloadsPlugins = Join-Path $root 'Downloads\NinaPlugins'
-foreach ($d in @($downloadsApps, $downloadsData, $downloadsPlugins)) {
-    if (-not (Test-Path $d)) { New-Item -ItemType Directory -Path $d -Force | Out-Null }
-}
-
-function Get-Manifest {
+function Get-ComponentDef {
     param([string]$Path)
     return Get-Content -Path $Path -Raw | ConvertFrom-Json -Depth 20
 }
@@ -61,13 +58,14 @@ function Get-CachedOrDownload {
     return $dest
 }
 
-$manifest = Get-Manifest -Path $Instance.ManifestPath
+$def = Get-ComponentDef -Path $Instance.ManifestPath
 
-switch ($Instance.Kind) {
+switch ($def.kind) {
     'Application' {
-        $def = $manifest.applications | Where-Object { $_.id -eq $Instance.Id }
-        if (-not $def) { throw "No application with id '$($Instance.Id)' in manifest." }
-
+        $downloadsApps = Join-Path $DownloadsRoot 'Applications'
+        if (-not (Test-Path $downloadsApps)) {
+            New-Item -ItemType Directory -Path $downloadsApps -Force | Out-Null
+        }
         $installerPath = Get-CachedOrDownload -Url $def.downloadUrl -DestFolder $downloadsApps `
             -FileName $def.downloadFileName -Sha256 $def.sha256
 
@@ -85,9 +83,10 @@ switch ($Instance.Kind) {
     }
 
     'Dataset' {
-        $def = $manifest.datasets | Where-Object { $_.id -eq $Instance.Id }
-        if (-not $def) { throw "No dataset with id '$($Instance.Id)' in manifest." }
-
+        $downloadsData = Join-Path $DownloadsRoot 'Datasets'
+        if (-not (Test-Path $downloadsData)) {
+            New-Item -ItemType Directory -Path $downloadsData -Force | Out-Null
+        }
         $installerPath = Get-CachedOrDownload -Url $def.downloadUrl -DestFolder $downloadsData `
             -FileName $def.downloadFileName -Sha256 $def.sha256
 
@@ -100,41 +99,8 @@ switch ($Instance.Kind) {
     }
 
     'NinaPlugin' {
-        $pluginDef = $manifest.ninaPlugins
-        $autoDeploy = [bool]$Instance.AutoDeployPlugins
-
-        # Re-evaluate which plugins are actually out of state right now.
-        $logPath = $pluginDef.logPath
-        $latestLog = Get-ChildItem -Path $logPath -Filter '*.log' -ErrorAction SilentlyContinue |
-            Sort-Object LastWriteTime -Descending | Select-Object -First 1
-        $loaded = @{}
-        if ($latestLog) {
-            Select-String -Path $latestLog.FullName -Pattern 'Successfully loaded plugin (.+) version (\S+) by' |
-                ForEach-Object { $loaded[$_.Matches[0].Groups[1].Value] = $_.Matches[0].Groups[2].Value }
-        }
-
-        $drift = $pluginDef.expected | Where-Object { $loaded[$_.name] -ne $_.version }
-        if (-not $drift) {
-            Write-Output "All pinned NINA plugins already match the last logged load - nothing to do."
-            break
-        }
-
-        if ($autoDeploy) {
-            $ninaRunning = Get-Process -Name 'NINA' -ErrorAction SilentlyContinue
-            if ($ninaRunning) {
-                throw "AutoDeployPlugins is set but NINA is currently running (PID $($ninaRunning.Id -join ',')). Close NINA before deploying plugin files, then re-run Set."
-            }
-        }
-
-        foreach ($p in $drift) {
-            Write-Output "Plugin drift detected: '$($p.name)' expected $($p.version), last logged as '$($loaded[$p.name])'."
-            Write-Warning "There is no official NINA API/CLI to install or update plugins. This tool will only cache the archive from the community manifest repo (isbeorn/nina.plugin.manifests); deploying it into NINA's live Plugins folder is unofficial and only happens when -AutoDeployPlugins is explicitly set."
-            # NOTE: actually resolving the per-plugin manifest.json + Installer.URL from the GitHub repo
-            # (by name + NINA's installed compat-version folder) and downloading into $downloadsPlugins
-            # is implemented in scripts/Update-Manifest.ps1's plugin-fetch helper, reused here conceptually.
-            # Left as a manual follow-up step in v1 to avoid silently mutating NINA's plugin folder unattended.
-        }
+        throw "Automatic NINA plugin remediation is not implemented. Use DSC Test to audit the pinned plugin set."
     }
 
-    default { throw "Unknown Kind '$($Instance.Kind)'." }
+    default { throw "Unknown kind '$($def.kind)' in '$($Instance.ManifestPath)'." }
 }

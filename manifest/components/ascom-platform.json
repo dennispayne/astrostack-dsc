@@ -1,0 +1,13 @@
+{
+  "id": "ascom-platform",
+  "kind": "Application",
+  "module": "platform",
+  "displayName": "ASCOM Platform 7.1 Update 3",
+  "versionSource": "DisplayVersion",
+  "expectedVersion": "7.1.3.4851",
+  "downloadUrl": "https://github.com/ASCOMInitiative/ASCOMPlatform/releases/download/v7.1.3/ASCOMPlatform713.4851.exe",
+  "downloadFileName": "ASCOMPlatform713.4851.exe",
+  "sha256": "307b8e32699bc75f12bcaa52f79ea2edcd245ee40066f0271ae47ace8411fea0",
+  "silentInstallArgs": ["/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART"],
+  "verified": true
+}

@@ -1,0 +1,37 @@
+{
+  "$schema": "https://aka.ms/dsc/schemas/v3/bundled/config/document.json",
+  "resources": [
+    {
+      "name": "Dataset: astap-db-d50",
+      "type": "AstroStack/Component",
+      "properties": {
+        "ManifestPath": "D:/Git/astrostack-dsc/manifest/components/astap-db-d50.json",
+        "InDesiredState": true
+      }
+    },
+    {
+      "name": "Dataset: astap-db-h18",
+      "type": "AstroStack/Component",
+      "properties": {
+        "ManifestPath": "D:/Git/astrostack-dsc/manifest/components/astap-db-h18.json",
+        "InDesiredState": true
+      }
+    },
+    {
+      "name": "Dataset: astap-db-w08",
+      "type": "AstroStack/Component",
+      "properties": {
+        "ManifestPath": "D:/Git/astrostack-dsc/manifest/components/astap-db-w08.json",
+        "InDesiredState": true
+      }
+    },
+    {
+      "name": "Dataset: astap",
+      "type": "AstroStack/Component",
+      "properties": {
+        "ManifestPath": "D:/Git/astrostack-dsc/manifest/components/astap.json",
+        "InDesiredState": true
+      }
+    }
+  ]
+}

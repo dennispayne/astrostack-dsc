@@ -1,0 +1,13 @@
+{
+  "id": "phd2",
+  "kind": "Application",
+  "module": "guiding",
+  "displayName": "PHD 2 version 2.6.14",
+  "versionSource": "DisplayNameRegex",
+  "versionRegex": "version\\s+([\\d.]+)",
+  "expectedVersion": "2.6.14",
+  "downloadUrl": "https://openphdguiding.org/phd2-2.6.14-installer.exe",
+  "downloadFileName": "phd2-2.6.14-installer.exe",
+  "silentInstallArgs": ["/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART"],
+  "verified": true
+}

@@ -2,17 +2,19 @@
 <#
 .SYNOPSIS
     DSC v3 custom resource implementation for AstroStack/Component.
-    Handles three kinds of tracked items:
+    Each instance points ManifestPath at ONE component file under manifest/components/*.json
+    (single object, not an array) - e.g. manifest/components/nina.json. Handles three kinds:
       - Application : software with a registry Uninstall entry (DisplayVersion or regex-from-DisplayName)
       - Dataset      : ASTAP program / star databases, tracked by file presence/date (no real version string)
       - NinaPlugin   : the full set of NINA plugins, verified via NINA's own log output (pinned list, all-or-nothing)
 
-    Invoked by dsc.exe as: pwsh -NoProfile -File Component.resource.ps1 <get|set|test|schema>
-    Instance JSON (Id, Kind, ManifestPath, [AutoDeployPlugins]) is read from stdin, JSON result written to stdout.
+    Invoked by dsc.exe as: pwsh -NoProfile -File Component.resource.ps1 <get|set|test>
+    Instance JSON (ManifestPath, [DownloadsRoot]) is read from stdin, JSON result written to stdout.
+    Id/Kind are read from the component file itself, not the instance - one file, one component, no lookup needed.
 #>
 param(
     [Parameter(Mandatory, Position = 0)]
-    [ValidateSet('get', 'set', 'test', 'schema')]
+    [ValidateSet('get', 'set', 'test')]
     [string]$Operation
 )
 
@@ -29,10 +31,12 @@ function Write-JsonLine {
     $Object | ConvertTo-Json -Depth 20 -Compress | Write-Output
 }
 
-function Get-Manifest {
+function Get-ComponentDef {
     param([string]$Path)
-    if (-not (Test-Path $Path)) { throw "Manifest not found at '$Path'." }
-    return Get-Content -Path $Path -Raw | ConvertFrom-Json -Depth 20
+    if (-not (Test-Path $Path)) { throw "Component manifest not found at '$Path'." }
+    $def = Get-Content -Path $Path -Raw | ConvertFrom-Json -Depth 20
+    if (-not $def.kind) { throw "Component manifest '$Path' is missing a 'kind' field (Application/Dataset/NinaPlugin)." }
+    return $def
 }
 
 function Get-InstalledPrograms {
@@ -164,7 +168,7 @@ function Resolve-NinaPluginState {
     }
 
     [PSCustomObject]@{
-        Id             = 'nina-plugins'
+        Id             = $PluginDef.id
         Kind           = 'NinaPlugin'
         LogFileUsed    = $logResult.LogFile
         LogTimeUtc     = $logResult.LogTimeUtc
@@ -177,85 +181,58 @@ function Resolve-NinaPluginState {
 function Get-ComponentState {
     param($Instance)
 
-    $manifest = Get-Manifest -Path $Instance.ManifestPath
+    $def = Get-ComponentDef -Path $Instance.ManifestPath
 
-    switch ($Instance.Kind) {
+    switch ($def.kind) {
         'Application' {
-            $appDef = $manifest.applications | Where-Object { $_.id -eq $Instance.Id }
-            if (-not $appDef) { throw "No application with id '$($Instance.Id)' in manifest." }
             $installed = Get-InstalledPrograms
-            return Resolve-ApplicationState -AppDef $appDef -InstalledPrograms $installed
+            return Resolve-ApplicationState -AppDef $def -InstalledPrograms $installed
         }
         'Dataset' {
-            $dsDef = $manifest.datasets | Where-Object { $_.id -eq $Instance.Id }
-            if (-not $dsDef) { throw "No dataset with id '$($Instance.Id)' in manifest." }
             $installed = Get-InstalledPrograms
-            return Resolve-DatasetState -DatasetDef $dsDef -InstalledPrograms $installed
+            return Resolve-DatasetState -DatasetDef $def -InstalledPrograms $installed
         }
         'NinaPlugin' {
-            return Resolve-NinaPluginState -PluginDef $manifest.ninaPlugins
+            return Resolve-NinaPluginState -PluginDef $def
         }
-        default { throw "Unknown Kind '$($Instance.Kind)'." }
+        default { throw "Unknown kind '$($def.kind)' in '$($Instance.ManifestPath)'." }
     }
 }
 
-switch ($Operation) {
-    'schema' {
-        # Minimal inline JSON schema describing the instance shape DSC should validate against.
-        $schema = [ordered]@{
-            '$schema'  = 'http://json-schema.org/draft-07/schema#'
-            type       = 'object'
-            required   = @('Id', 'Kind', 'ManifestPath')
-            properties = [ordered]@{
-                Id               = @{ type = 'string' }
-                Kind             = @{ type = 'string'; enum = @('Application', 'Dataset', 'NinaPlugin') }
-                ManifestPath     = @{ type = 'string' }
-                AutoDeployPlugins = @{ type = 'boolean' }
-                InDesiredState   = @{ type = 'boolean' }
-            }
-        }
-        Write-JsonLine $schema
+function New-EchoResult {
+    param($Instance, $State)
+    $result = [ordered]@{
+        Id             = $State.Id
+        Kind           = $State.Kind
+        ManifestPath   = $Instance.ManifestPath
+        InDesiredState = $State.InDesiredState
+        Detail         = $State
     }
+    if ($null -ne $Instance.DownloadsRoot) { $result.DownloadsRoot = $Instance.DownloadsRoot }
+    return $result
+}
 
+switch ($Operation) {
     'get' {
         $instance = Read-StdinJson
         $state = Get-ComponentState -Instance $instance
-        $result = [ordered]@{
-            Id             = $instance.Id
-            Kind           = $instance.Kind
-            ManifestPath   = $instance.ManifestPath
-            InDesiredState = $state.InDesiredState
-            Detail         = $state
-        }
-        Write-JsonLine $result
+        Write-JsonLine (New-EchoResult -Instance $instance -State $state)
     }
 
     'test' {
         $instance = Read-StdinJson
         $state = Get-ComponentState -Instance $instance
-        # DSC 'test' convention: echo back the instance properties plus _inDesiredState
-        $result = [ordered]@{
-            Id             = $instance.Id
-            Kind           = $instance.Kind
-            ManifestPath   = $instance.ManifestPath
-            InDesiredState = $state.InDesiredState
-            Detail         = $state
-        }
-        Write-JsonLine $result
+        Write-JsonLine (New-EchoResult -Instance $instance -State $state)
     }
 
     'set' {
         $instance = Read-StdinJson
-        & "$PSScriptRoot\Set-Component.ps1" -Instance $instance | Out-Null
+        if (-not $instance.DownloadsRoot) {
+            throw "DownloadsRoot is required for 'set' - specify a cache folder outside this repo (e.g. D:\AstroStackCache) in the DSC instance properties."
+        }
+        & "$PSScriptRoot\Set-Component.ps1" -Instance $instance -DownloadsRoot $instance.DownloadsRoot | Out-Null
         # Re-evaluate and emit the resulting state so `dsc` can report what Set achieved.
         $state = Get-ComponentState -Instance $instance
-        $result = [ordered]@{
-            Id             = $instance.Id
-            Kind           = $instance.Kind
-            ManifestPath   = $instance.ManifestPath
-            InDesiredState = $state.InDesiredState
-            Detail         = $state
-        }
-        Write-JsonLine $result
+        Write-JsonLine (New-EchoResult -Instance $instance -State $state)
     }
 }

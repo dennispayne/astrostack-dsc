@@ -1,0 +1,13 @@
+{
+  "id": "ascom-ogmavision",
+  "kind": "Application",
+  "module": "misc-ascom",
+  "displayName": "ASCOM OGMAVision Driver 6.5",
+  "versionSource": "DisplayVersion",
+  "expectedVersion": "6.5",
+  "downloadUrl": null,
+  "downloadFileName": "OGMAVision_ASCOM_6.5.exe",
+  "silentInstallArgs": null,
+  "verified": false,
+  "notes": "No confirmed direct URL. Vendor: getogma.com/drivers."
+}

@@ -1,0 +1,15 @@
+{
+  "id": "nina",
+  "kind": "Application",
+  "module": "imaging-app",
+  "displayName": "N.I.N.A. - Nighttime Imaging 'N' Astronomy",
+  "versionSource": "DisplayVersion",
+  "expectedVersion": "3.2.0.9001",
+  "downloadUrl": "https://github.com/isbeorn/nina/releases/download/Version-3.2/NINASetupBundle_3.2.0.9001.zip",
+  "downloadFileName": "NINASetupBundle_3.2.0.9001.zip",
+  "sha256": "4273b75194b20e57b967bfe1a48a5391f144e56083fc987d4f4779d11d6b2182",
+  "archiveContainsInstaller": true,
+  "silentInstallArgs": null,
+  "installNotes": "Bundle is a ZIP containing the real NINA installer + redistributables; extract and run the .exe inside manually or update the automation script once the inner filename is confirmed.",
+  "verified": true
+}

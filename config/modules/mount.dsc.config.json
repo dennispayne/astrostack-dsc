@@ -1,0 +1,13 @@
+{
+  "$schema": "https://aka.ms/dsc/schemas/v3/bundled/config/document.json",
+  "resources": [
+    {
+      "name": "Application: ioptron-commander-cem40",
+      "type": "AstroStack/Component",
+      "properties": {
+        "ManifestPath": "D:/Git/astrostack-dsc/manifest/components/ioptron-commander-cem40.json",
+        "InDesiredState": true
+      }
+    }
+  ]
+}

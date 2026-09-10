@@ -1,0 +1,21 @@
+{
+  "$schema": "https://aka.ms/dsc/schemas/v3/bundled/config/document.json",
+  "resources": [
+    {
+      "name": "NinaPlugin: nina-plugins",
+      "type": "AstroStack/Component",
+      "properties": {
+        "ManifestPath": "D:/Git/astrostack-dsc/manifest/components/nina-plugins.json",
+        "InDesiredState": true
+      }
+    },
+    {
+      "name": "Application: nina",
+      "type": "AstroStack/Component",
+      "properties": {
+        "ManifestPath": "D:/Git/astrostack-dsc/manifest/components/nina.json",
+        "InDesiredState": true
+      }
+    }
+  ]
+}

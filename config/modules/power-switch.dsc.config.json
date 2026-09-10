@@ -1,0 +1,13 @@
+{
+  "$schema": "https://aka.ms/dsc/schemas/v3/bundled/config/document.json",
+  "resources": [
+    {
+      "name": "Application: darkskygeek-switchhub",
+      "type": "AstroStack/Component",
+      "properties": {
+        "ManifestPath": "D:/Git/astrostack-dsc/manifest/components/darkskygeek-switchhub.json",
+        "InDesiredState": true
+      }
+    }
+  ]
+}

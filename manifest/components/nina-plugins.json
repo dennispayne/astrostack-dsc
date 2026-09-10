@@ -1,0 +1,32 @@
+{
+  "id": "nina-plugins",
+  "kind": "NinaPlugin",
+  "module": "imaging-app",
+  "logPath": "C:\\Users\\dennis\\AppData\\Local\\NINA\\Logs",
+  "pluginFolderPath": "C:\\Users\\dennis\\AppData\\Local\\NINA\\Plugins\\3.0.0",
+  "manifestRepo": "isbeorn/nina.plugin.manifests",
+  "note": "Version is NOT reliable from the plugin DLL FileVersion (NINA doesn't stamp it meaningfully). It IS reliably logged by NINA's PluginLoader on every successful load, e.g. 'Successfully loaded plugin <Name> version <Version> by <Author>'. Enforcement here means: verify the pinned version was the one most recently logged as loaded. There is NO official API/CLI to install or update NINA plugins; NINA's Plugin Manager (GUI) is the only sanctioned path. This tool CAN download+checksum-verify the plugin archive from the community manifest repo and drop it into pluginFolderPath (mirroring what NINA does internally), but this is unofficial - NINA must be closed during the copy and restarted afterward to pick it up. This file lives in the same 'imaging-app' module as nina.json - if NINA is ever swapped for another sequencer (e.g. Sequence Generator Pro), replace both files together with that app's own equivalents.",
+  "expected": [
+    { "name": "Advanced API", "version": "2.2.15.2" },
+    { "name": "AI Assistant", "version": "2.5.5.0" },
+    { "name": "Autofocus Report Analysis", "version": "2.0.1.0" },
+    { "name": "CPU\\GPU Computing for NINA", "version": "0.6.1.0" },
+    { "name": "Exposure Calculator", "version": "2.0.0.0" },
+    { "name": "GuidingAnalyzer", "version": "1.0.0.1" },
+    { "name": "Hocus Focus", "version": "4.0.0.20" },
+    { "name": "Orbitals", "version": "3.2.0.5" },
+    { "name": "Phd2 Tools", "version": "1.0.6.0" },
+    { "name": "PixInsight Tools", "version": "1.0.0.3" },
+    { "name": "RTSP Client", "version": "3.1.0.6" },
+    { "name": "Scope Control", "version": "2.0.2.1" },
+    { "name": "Session Metadata", "version": "2.6.3.0" },
+    { "name": "Smart Meridian Flip", "version": "2.0.0.0" },
+    { "name": "Target Planning", "version": "3.2.2.0" },
+    { "name": "Three Point Polar Alignment", "version": "2.2.6.7" },
+    { "name": "Web Session History Viewer", "version": "2.2.1.0" }
+  ],
+  "knownOrphanedFolders": [
+    { "name": "AI Weather", "note": "Present in Plugins\\3.0.0 folder but NOT loaded by NINA in the latest session log - likely disabled in-app or an incomplete uninstall. Not enforced; flagged informationally only." },
+    { "name": "Point3D", "note": "Same as above - present on disk, not loaded." }
+  ]
+}

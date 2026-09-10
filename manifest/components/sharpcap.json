@@ -1,0 +1,13 @@
+{
+  "id": "sharpcap",
+  "kind": "Application",
+  "module": "secondary-capture",
+  "displayName": "SharpCap 4.1 (64 bit)",
+  "versionSource": "DisplayVersion",
+  "expectedVersion": "4.1.14310",
+  "downloadUrl": null,
+  "downloadFileName": "SharpCapInstall-4.1.14310.0-64bit.exe",
+  "silentInstallArgs": ["/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART"],
+  "verified": false,
+  "notes": "Download page is behind Cloudflare bot-check; no scriptable direct URL confirmed. Populate the DownloadsRoot\\Applications cache manually, or update Update-Manifest.ps1 if a stable link is found."
+}

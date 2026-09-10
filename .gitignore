@@ -1,10 +1,4 @@
-# Downloads cache is deliberately re-creatable from manifest URLs/checksums - don't commit large binaries.
-Downloads/Applications/*
-Downloads/Datasets/*
-Downloads/NinaPlugins/*
-!Downloads/Applications/.gitkeep
-!Downloads/Datasets/.gitkeep
-!Downloads/NinaPlugins/.gitkeep
-
-logs/*
-!logs/.gitkeep
+# Package caches and test output are caller-owned and must stay outside the repository.
+Downloads/
+logs/
+*.test-result.json

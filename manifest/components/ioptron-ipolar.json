@@ -1,0 +1,13 @@
+{
+  "id": "ioptron-ipolar",
+  "kind": "Application",
+  "module": "polar-alignment",
+  "displayName": "iOptron iPolar 2.7.3.3",
+  "versionSource": "DisplayVersion",
+  "expectedVersion": "2.7.3.3",
+  "downloadUrl": null,
+  "downloadFileName": "iPolar.zip",
+  "silentInstallArgs": null,
+  "verified": false,
+  "notes": "No static direct-download URL confirmed via HTTP fetch; installed version (2.7.3.3) is already newer than any publicly indexed version reference found. Low priority."
+}

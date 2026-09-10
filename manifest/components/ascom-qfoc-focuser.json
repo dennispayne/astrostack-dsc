@@ -1,0 +1,13 @@
+{
+  "id": "ascom-qfoc-focuser",
+  "kind": "Application",
+  "module": "focuser",
+  "displayName": "ASCOM qfoc Focuser Driver 24.08.28.13",
+  "versionSource": "DisplayVersion",
+  "expectedVersion": "24.08.28.13",
+  "downloadUrl": null,
+  "downloadFileName": "qfoc_Focuser_ASCOM.exe",
+  "silentInstallArgs": null,
+  "verified": false,
+  "notes": "No confirmed direct URL found for this exact driver/version."
+}

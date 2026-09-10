@@ -1,53 +1,96 @@
 #requires -Version 7.0
 <#
 .SYNOPSIS
-    Generates config\astro-stack.dsc.config.yaml from manifest\astro-stack.manifest.json.
-    Re-run this after adding/removing entries in the manifest so the DSC config stays in sync.
-    (Bumping an *existing* entry's expectedVersion does NOT require regenerating - the config
-    references ManifestPath and re-reads it live on every dsc invocation.)
+    Generates one DSC config file per module under config\modules\*.dsc.config.json from
+    manifest\components\*.json (grouped by each file's 'module' field), plus a top-level
+    aggregator config\astro-stack.dsc.config.json that Microsoft.DSC/Include-s each module file.
+
+    Re-run this after adding/removing component files or changing a component's 'module' tag.
+    Bumping an *existing* component's expectedVersion does NOT require regenerating - every
+    generated resource references ManifestPath and DSC re-reads that file live on every invocation.
+
+    Swapping a major component (e.g. NINA -> Sequence Generator Pro) means replacing the
+    component file(s) for that module and regenerating just that module's config - the
+    aggregator itself only lists module file paths and does not need to change.
 #>
 param(
     [string]$RepoRoot = (Resolve-Path "$PSScriptRoot\..").Path
 )
 
 $ErrorActionPreference = 'Stop'
-$manifestPath = Join-Path $RepoRoot 'manifest\astro-stack.manifest.json'
-$manifestPathForward = $manifestPath -replace '\\', '/'
-$manifest = Get-Content $manifestPath -Raw | ConvertFrom-Json -Depth 20
+$componentsDir = Join-Path $RepoRoot 'manifest\components'
+$modulesOutDir = Join-Path $RepoRoot 'config\modules'
+if (-not (Test-Path $modulesOutDir)) { New-Item -ItemType Directory -Path $modulesOutDir -Force | Out-Null }
+Get-ChildItem -Path $modulesOutDir -Filter '*.dsc.config.json' -File |
+    Remove-Item -Force
+
+$componentFiles = Get-ChildItem -Path $componentsDir -Filter '*.json' | Sort-Object Name
+if (-not $componentFiles) { throw "No component files found under '$componentsDir'." }
 
 function New-ResourceBlock {
-    param([string]$Name, [string]$Id, [string]$Kind)
+    param([string]$Id, [string]$Kind, [string]$ManifestPathForward)
     [ordered]@{
-        name = $Name
-        type = 'AstroStack/Component'
+        name       = "$Kind`: $Id"
+        type       = 'AstroStack/Component'
         properties = [ordered]@{
-            Id             = $Id
-            Kind           = $Kind
-            ManifestPath   = $manifestPathForward
+            ManifestPath   = $ManifestPathForward
             InDesiredState = $true
         }
     }
 }
 
-$resources = [System.Collections.Generic.List[object]]::new()
-
-foreach ($app in $manifest.applications) {
-    $resources.Add((New-ResourceBlock -Name "Application: $($app.id)" -Id $app.id -Kind 'Application'))
+# Group component files by their own 'module' field (swap-unit for extensibility).
+$byModule = [ordered]@{}
+foreach ($file in $componentFiles) {
+    $def = Get-Content $file.FullName -Raw | ConvertFrom-Json -Depth 20
+    foreach ($field in @('id', 'kind', 'module')) {
+        if (-not $def.$field) { throw "Component file '$($file.FullName)' is missing required field '$field'." }
+    }
+    if (-not $byModule.Contains($def.module)) { $byModule[$def.module] = [System.Collections.Generic.List[object]]::new() }
+    $byModule[$def.module].Add([PSCustomObject]@{
+        Id           = $def.id
+        Kind         = $def.kind
+        ManifestPath = ($file.FullName -replace '\\', '/')
+    })
 }
-foreach ($ds in $manifest.datasets) {
-    $resources.Add((New-ResourceBlock -Name "Dataset: $($ds.id)" -Id $ds.id -Kind 'Dataset'))
-}
-$resources.Add((New-ResourceBlock -Name 'NINA plugins (pinned set)' -Id 'nina-plugins' -Kind 'NinaPlugin'))
 
-$doc = [ordered]@{
-    '$schema'   = 'https://aka.ms/dsc/schemas/v3/bundled/config/document.json'
-    directives  = [ordered]@{ securityContext = 'elevated' }
-    resources   = $resources
+foreach ($moduleName in ($byModule.Keys | Sort-Object)) {
+    $resources = [System.Collections.Generic.List[object]]::new()
+    foreach ($item in $byModule[$moduleName]) {
+        $resources.Add((New-ResourceBlock -Id $item.Id -Kind $item.Kind -ManifestPathForward $item.ManifestPath))
+    }
+
+    $moduleDoc = [ordered]@{
+        '$schema' = 'https://aka.ms/dsc/schemas/v3/bundled/config/document.json'
+        resources = $resources
+    }
+
+    $moduleOutPath = Join-Path $modulesOutDir "$moduleName.dsc.config.json"
+    $moduleDoc | ConvertTo-Json -Depth 20 | Set-Content -Path $moduleOutPath -Encoding utf8
+    Write-Output "Wrote $moduleOutPath ($($resources.Count) resource instances, module '$moduleName')"
 }
 
-# ConvertTo-Yaml isn't built into PowerShell; DSC accepts JSON too (config documents may be JSON or YAML),
-# so emit JSON with a .dsc.config.yaml-compatible name isn't ideal - write real JSON with a .json extension
-# instead, which `dsc config` accepts identically to YAML.
-$outPath = Join-Path $RepoRoot 'config\astro-stack.dsc.config.json'
-$doc | ConvertTo-Json -Depth 20 | Set-Content -Path $outPath -Encoding utf8
-Write-Output "Wrote $outPath ($($resources.Count) resource instances)"
+# Top-level aggregator: one Microsoft.DSC/Include per module file. To swap a module (e.g. replace
+# NINA with Sequence Generator Pro), replace that module's component file(s) + regenerate just its
+# config file - this aggregator only references module file paths and needs no changes.
+$includeResources = [System.Collections.Generic.List[object]]::new()
+foreach ($moduleName in ($byModule.Keys | Sort-Object)) {
+    $relPath = "modules/$moduleName.dsc.config.json"
+    $includeResources.Add([ordered]@{
+        name       = "Module: $moduleName"
+        type       = 'Microsoft.DSC/Include'
+        properties = [ordered]@{
+            configurationFile = $relPath
+        }
+    })
+}
+
+$aggregatorDoc = [ordered]@{
+    '$schema'  = 'https://aka.ms/dsc/schemas/v3/bundled/config/document.json'
+    directives = [ordered]@{ securityContext = 'elevated' }
+    resources  = $includeResources
+}
+
+$aggregatorOutPath = Join-Path $RepoRoot 'config\astro-stack.dsc.config.json'
+$aggregatorDoc | ConvertTo-Json -Depth 20 | Set-Content -Path $aggregatorOutPath -Encoding utf8
+Write-Output "Wrote $aggregatorOutPath ($($includeResources.Count) module includes)"

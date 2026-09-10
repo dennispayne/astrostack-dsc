@@ -1,0 +1,15 @@
+{
+  "id": "astap-db-w08",
+  "kind": "Dataset",
+  "module": "astap",
+  "displayName": "ASTAP w08 star dabase up to mag 8, version eDR3",
+  "versionSource": "DisplayNameRegex",
+  "versionRegex": "version\\s+(\\S+)",
+  "expectedVersion": "eDR3",
+  "checkPath": "C:\\Program Files\\astap\\w08_*",
+  "versionStrategy": "PathExists",
+  "downloadUrl": "https://sourceforge.net/projects/astap-program/files/star_databases/w08_star_database_mag08_astap.exe/download",
+  "downloadFileName": "w08_star_database_mag08_astap.exe",
+  "silentInstallArgs": ["/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART"],
+  "verified": true
+}
