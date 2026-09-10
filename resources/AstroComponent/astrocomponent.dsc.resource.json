@@ -1,0 +1,64 @@
+{
+    "$schema": "https://aka.ms/dsc/schemas/v3/bundled/resource/manifest.json",
+    "type": "AstroStack/Component",
+    "version": "0.1.0",
+    "description": "Tracks a single astrophotography stack component (Application, Dataset, or the pinned NinaPlugin set) against astro-stack.manifest.json.",
+    "tags": [ "astrophotography", "astropc" ],
+    "get": {
+        "executable": "pwsh",
+        "args": [
+            "-NoLogo",
+            "-NonInteractive",
+            "-NoProfile",
+            "-ExecutionPolicy", "Bypass",
+            "-File", "./Component.resource.ps1",
+            "get"
+        ],
+        "input": "stdin"
+    },
+    "set": {
+        "executable": "pwsh",
+        "args": [
+            "-NoLogo",
+            "-NonInteractive",
+            "-NoProfile",
+            "-ExecutionPolicy", "Bypass",
+            "-File", "./Component.resource.ps1",
+            "set"
+        ],
+        "input": "stdin",
+        "return": "state"
+    },
+    "test": {
+        "executable": "pwsh",
+        "args": [
+            "-NoLogo",
+            "-NonInteractive",
+            "-NoProfile",
+            "-ExecutionPolicy", "Bypass",
+            "-File", "./Component.resource.ps1",
+            "test"
+        ],
+        "input": "stdin",
+        "return": "state"
+    },
+    "schema": {
+        "embedded": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "required": [ "Id", "Kind", "ManifestPath" ],
+            "additionalProperties": true,
+            "properties": {
+                "Id": { "type": "string", "description": "Manifest entry id to check/enforce." },
+                "Kind": { "type": "string", "enum": [ "Application", "Dataset", "NinaPlugin" ] },
+                "ManifestPath": { "type": "string", "description": "Path to astro-stack.manifest.json." },
+                "AutoDeployPlugins": { "type": "boolean", "description": "Only used for Kind=NinaPlugin; opt-in unofficial auto-deploy of cached plugin archives." },
+                "InDesiredState": { "type": "boolean", "readOnly": true }
+            }
+        }
+    },
+    "exitCodes": {
+        "0": "Success",
+        "1": "Error - see stderr for detail"
+    }
+}

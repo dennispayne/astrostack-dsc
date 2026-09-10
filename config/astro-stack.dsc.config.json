@@ -1,0 +1,158 @@
+{
+  "$schema": "https://aka.ms/dsc/schemas/v3/bundled/config/document.json",
+  "directives": {
+    "securityContext": "elevated"
+  },
+  "resources": [
+    {
+      "name": "Application: nina",
+      "type": "AstroStack/Component",
+      "properties": {
+        "Id": "nina",
+        "Kind": "Application",
+        "ManifestPath": "C:/Users/dennis/AstroStack-DSC/manifest/astro-stack.manifest.json",
+        "InDesiredState": true
+      }
+    },
+    {
+      "name": "Application: ascom-platform",
+      "type": "AstroStack/Component",
+      "properties": {
+        "Id": "ascom-platform",
+        "Kind": "Application",
+        "ManifestPath": "C:/Users/dennis/AstroStack-DSC/manifest/astro-stack.manifest.json",
+        "InDesiredState": true
+      }
+    },
+    {
+      "name": "Application: phd2",
+      "type": "AstroStack/Component",
+      "properties": {
+        "Id": "phd2",
+        "Kind": "Application",
+        "ManifestPath": "C:/Users/dennis/AstroStack-DSC/manifest/astro-stack.manifest.json",
+        "InDesiredState": true
+      }
+    },
+    {
+      "name": "Application: sharpcap",
+      "type": "AstroStack/Component",
+      "properties": {
+        "Id": "sharpcap",
+        "Kind": "Application",
+        "ManifestPath": "C:/Users/dennis/AstroStack-DSC/manifest/astro-stack.manifest.json",
+        "InDesiredState": true
+      }
+    },
+    {
+      "name": "Application: ioptron-commander-cem40",
+      "type": "AstroStack/Component",
+      "properties": {
+        "Id": "ioptron-commander-cem40",
+        "Kind": "Application",
+        "ManifestPath": "C:/Users/dennis/AstroStack-DSC/manifest/astro-stack.manifest.json",
+        "InDesiredState": true
+      }
+    },
+    {
+      "name": "Application: ioptron-iguider",
+      "type": "AstroStack/Component",
+      "properties": {
+        "Id": "ioptron-iguider",
+        "Kind": "Application",
+        "ManifestPath": "C:/Users/dennis/AstroStack-DSC/manifest/astro-stack.manifest.json",
+        "InDesiredState": true
+      }
+    },
+    {
+      "name": "Application: ioptron-ipolar",
+      "type": "AstroStack/Component",
+      "properties": {
+        "Id": "ioptron-ipolar",
+        "Kind": "Application",
+        "ManifestPath": "C:/Users/dennis/AstroStack-DSC/manifest/astro-stack.manifest.json",
+        "InDesiredState": true
+      }
+    },
+    {
+      "name": "Application: ascom-ogmavision",
+      "type": "AstroStack/Component",
+      "properties": {
+        "Id": "ascom-ogmavision",
+        "Kind": "Application",
+        "ManifestPath": "C:/Users/dennis/AstroStack-DSC/manifest/astro-stack.manifest.json",
+        "InDesiredState": true
+      }
+    },
+    {
+      "name": "Application: ascom-qfoc-focuser",
+      "type": "AstroStack/Component",
+      "properties": {
+        "Id": "ascom-qfoc-focuser",
+        "Kind": "Application",
+        "ManifestPath": "C:/Users/dennis/AstroStack-DSC/manifest/astro-stack.manifest.json",
+        "InDesiredState": true
+      }
+    },
+    {
+      "name": "Application: darkskygeek-switchhub",
+      "type": "AstroStack/Component",
+      "properties": {
+        "Id": "darkskygeek-switchhub",
+        "Kind": "Application",
+        "ManifestPath": "C:/Users/dennis/AstroStack-DSC/manifest/astro-stack.manifest.json",
+        "InDesiredState": true
+      }
+    },
+    {
+      "name": "Dataset: astap",
+      "type": "AstroStack/Component",
+      "properties": {
+        "Id": "astap",
+        "Kind": "Dataset",
+        "ManifestPath": "C:/Users/dennis/AstroStack-DSC/manifest/astro-stack.manifest.json",
+        "InDesiredState": true
+      }
+    },
+    {
+      "name": "Dataset: astap-db-d50",
+      "type": "AstroStack/Component",
+      "properties": {
+        "Id": "astap-db-d50",
+        "Kind": "Dataset",
+        "ManifestPath": "C:/Users/dennis/AstroStack-DSC/manifest/astro-stack.manifest.json",
+        "InDesiredState": true
+      }
+    },
+    {
+      "name": "Dataset: astap-db-h18",
+      "type": "AstroStack/Component",
+      "properties": {
+        "Id": "astap-db-h18",
+        "Kind": "Dataset",
+        "ManifestPath": "C:/Users/dennis/AstroStack-DSC/manifest/astro-stack.manifest.json",
+        "InDesiredState": true
+      }
+    },
+    {
+      "name": "Dataset: astap-db-w08",
+      "type": "AstroStack/Component",
+      "properties": {
+        "Id": "astap-db-w08",
+        "Kind": "Dataset",
+        "ManifestPath": "C:/Users/dennis/AstroStack-DSC/manifest/astro-stack.manifest.json",
+        "InDesiredState": true
+      }
+    },
+    {
+      "name": "NINA plugins (pinned set)",
+      "type": "AstroStack/Component",
+      "properties": {
+        "Id": "nina-plugins",
+        "Kind": "NinaPlugin",
+        "ManifestPath": "C:/Users/dennis/AstroStack-DSC/manifest/astro-stack.manifest.json",
+        "InDesiredState": true
+      }
+    }
+  ]
+}
