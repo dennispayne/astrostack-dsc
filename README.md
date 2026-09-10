@@ -1,6 +1,18 @@
-# AstroStack DSC
+<div align="center">
+  <img src="assets/astrostack-dsc.svg" width="220" alt="AstroStack DSC telescope and configuration logo">
+  <h1>AstroStack DSC</h1>
+  <p><strong>Keep an astrophotography workstation aligned, repeatable, and ready for clear skies.</strong></p>
+  <p>
+    <img alt="DSC v3" src="https://img.shields.io/badge/DSC-v3-6366f1?style=flat-square">
+    <img alt="PowerShell 7" src="https://img.shields.io/badge/PowerShell-7-2563eb?style=flat-square">
+    <img alt="Platform Windows" src="https://img.shields.io/badge/platform-Windows-0891b2?style=flat-square">
+  </p>
+</div>
 
-DSC v3 configuration for auditing and maintaining the software, datasets, and NINA plugins used by this astrophotography workstation.
+AstroStack DSC audits and maintains the applications, datasets, drivers, plugins, and selected application settings used by an astrophotography workstation. Its pinned, modular configuration is designed to be reproducible today and composable when major stack components change later.
+
+> [!NOTE]
+> The project currently targets one real workstation and is evolving from installation/version compliance into safely tested application-level configuration.
 
 ## Structure
 
