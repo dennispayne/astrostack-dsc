@@ -50,7 +50,7 @@
             "additionalProperties": true,
             "properties": {
                 "ManifestPath": { "type": "string", "description": "Path to a single component file under manifest/components/*.json." },
-                "DownloadsRoot": { "type": "string", "description": "Cache root for installers/datasets/plugin archives, required for Set. Not part of this repo - point it at a folder outside source control." },
+                "ArtifactMapPath": { "type": "string", "description": "Path to wgfetch's schemaVersion 1 PackageIdentifier-to-artifact-path mapping file; required for Set." },
                 "InDesiredState": { "type": "boolean", "readOnly": true }
             }
         }

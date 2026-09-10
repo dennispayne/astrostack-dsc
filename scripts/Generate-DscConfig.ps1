@@ -18,6 +18,7 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+Import-Module "$PSScriptRoot\lib\ComponentContract.psm1" -Force
 $componentsDir = Join-Path $RepoRoot 'manifest\components'
 $modulesOutDir = Join-Path $RepoRoot 'config\modules'
 if (-not (Test-Path $modulesOutDir)) { New-Item -ItemType Directory -Path $modulesOutDir -Force | Out-Null }
@@ -43,9 +44,7 @@ function New-ResourceBlock {
 $byModule = [ordered]@{}
 foreach ($file in $componentFiles) {
     $def = Get-Content $file.FullName -Raw | ConvertFrom-Json -Depth 20
-    foreach ($field in @('id', 'kind', 'module')) {
-        if (-not $def.$field) { throw "Component file '$($file.FullName)' is missing required field '$field'." }
-    }
+    Assert-ComponentDefinition -Component $def -Source $file.FullName
     if (-not $byModule.Contains($def.module)) { $byModule[$def.module] = [System.Collections.Generic.List[object]]::new() }
     $byModule[$def.module].Add([PSCustomObject]@{
         Id           = $def.id

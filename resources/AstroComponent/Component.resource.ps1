@@ -5,11 +5,11 @@
     Each instance points ManifestPath at ONE component file under manifest/components/*.json
     (single object, not an array) - e.g. manifest/components/nina.json. Handles three kinds:
       - Application : software with a registry Uninstall entry (DisplayVersion or regex-from-DisplayName)
-      - Dataset      : ASTAP program / star databases, tracked by file presence/date (no real version string)
+      - Dataset      : ASTAP star databases, tracked by file presence and registry metadata
       - NinaPlugin   : the full set of NINA plugins, verified via NINA's own log output (pinned list, all-or-nothing)
 
     Invoked by dsc.exe as: pwsh -NoProfile -File Component.resource.ps1 <get|set|test>
-    Instance JSON (ManifestPath, [DownloadsRoot]) is read from stdin, JSON result written to stdout.
+    Instance JSON (ManifestPath, [ArtifactMapPath]) is read from stdin, JSON result written to stdout.
     Id/Kind are read from the component file itself, not the instance - one file, one component, no lookup needed.
 #>
 param(
@@ -19,6 +19,7 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+Import-Module "$PSScriptRoot\..\..\scripts\lib\ComponentContract.psm1" -Force
 
 function Read-StdinJson {
     $raw = [Console]::In.ReadToEnd()
@@ -36,6 +37,7 @@ function Get-ComponentDef {
     if (-not (Test-Path $Path)) { throw "Component manifest not found at '$Path'." }
     $def = Get-Content -Path $Path -Raw | ConvertFrom-Json -Depth 20
     if (-not $def.kind) { throw "Component manifest '$Path' is missing a 'kind' field (Application/Dataset/NinaPlugin)." }
+    Assert-ComponentDefinition -Component $def -Source $Path
     return $def
 }
 
@@ -82,6 +84,7 @@ function Resolve-ApplicationState {
         Installed        = [bool]$match
         InstalledVersion = $installedVersion
         ExpectedVersion  = $AppDef.expectedVersion
+        AvailableVersion = $AppDef.availableVersion
         InDesiredState   = ($match -and $installedVersion -eq $AppDef.expectedVersion)
     }
 }
@@ -121,6 +124,7 @@ function Resolve-DatasetState {
         PathExists       = $exists
         InstalledVersion = $installedVersion
         ExpectedVersion  = $DatasetDef.expectedVersion
+        AvailableVersion = $DatasetDef.availableVersion
         Detail           = $detail
         InDesiredState   = [bool]($exists -and $registryOk)
     }
@@ -172,6 +176,7 @@ function Resolve-NinaPluginState {
         Kind           = 'NinaPlugin'
         LogFileUsed    = $logResult.LogFile
         LogTimeUtc     = $logResult.LogTimeUtc
+        AvailableVersion = $PluginDef.availableVersion
         Items          = $items
         Orphaned       = $orphaned
         InDesiredState = -not ($items | Where-Object { -not $_.InDesiredState })
@@ -208,7 +213,7 @@ function New-EchoResult {
         InDesiredState = $State.InDesiredState
         Detail         = $State
     }
-    if ($null -ne $Instance.DownloadsRoot) { $result.DownloadsRoot = $Instance.DownloadsRoot }
+    if ($null -ne $Instance.ArtifactMapPath) { $result.ArtifactMapPath = $Instance.ArtifactMapPath }
     return $result
 }
 
@@ -227,10 +232,10 @@ switch ($Operation) {
 
     'set' {
         $instance = Read-StdinJson
-        if (-not $instance.DownloadsRoot) {
-            throw "DownloadsRoot is required for 'set' - specify a cache folder outside this repo (e.g. D:\AstroStackCache) in the DSC instance properties."
+        if (-not $instance.ArtifactMapPath) {
+            throw "ArtifactMapPath is required for 'set' and must point to wgfetch's PackageIdentifier-to-path mapping file."
         }
-        & "$PSScriptRoot\Set-Component.ps1" -Instance $instance -DownloadsRoot $instance.DownloadsRoot | Out-Null
+        & "$PSScriptRoot\Set-Component.ps1" -Instance $instance -ArtifactMapPath $instance.ArtifactMapPath | Out-Null
         # Re-evaluate and emit the resulting state so `dsc` can report what Set achieved.
         $state = Get-ComponentState -Instance $instance
         Write-JsonLine (New-EchoResult -Instance $instance -State $state)

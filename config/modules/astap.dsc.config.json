@@ -26,7 +26,7 @@
       }
     },
     {
-      "name": "Dataset: astap",
+      "name": "Application: astap",
       "type": "AstroStack/Component",
       "properties": {
         "ManifestPath": "D:/Git/astrostack-dsc/manifest/components/astap.json",

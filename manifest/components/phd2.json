@@ -1,13 +1,18 @@
 {
+  "schemaVersion": 1,
   "id": "phd2",
+  "wingetId": "AstroStack.PHD2",
   "kind": "Application",
   "module": "guiding",
+  "allowlistDomains": ["openphdguiding.org"],
   "displayName": "PHD 2 version 2.6.14",
   "versionSource": "DisplayNameRegex",
   "versionRegex": "version\\s+([\\d.]+)",
   "expectedVersion": "2.6.14",
-  "downloadUrl": "https://openphdguiding.org/phd2-2.6.14-installer.exe",
+  "availableVersion": null,
+  "downloadUrl": null,
   "downloadFileName": "phd2-2.6.14-installer.exe",
+  "sha256": null,
   "silentInstallArgs": ["/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART"],
-  "verified": true
+  "verified": false
 }

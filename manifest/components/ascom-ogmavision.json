@@ -1,12 +1,17 @@
 {
+  "schemaVersion": 1,
   "id": "ascom-ogmavision",
+  "wingetId": "AstroStack.ASCOM.OGMAVision",
   "kind": "Application",
   "module": "misc-ascom",
+  "allowlistDomains": ["getogma.com"],
   "displayName": "ASCOM OGMAVision Driver 6.5",
   "versionSource": "DisplayVersion",
   "expectedVersion": "6.5",
+  "availableVersion": null,
   "downloadUrl": null,
   "downloadFileName": "OGMAVision_ASCOM_6.5.exe",
+  "sha256": null,
   "silentInstallArgs": null,
   "verified": false,
   "notes": "No confirmed direct URL. Vendor: getogma.com/drivers."

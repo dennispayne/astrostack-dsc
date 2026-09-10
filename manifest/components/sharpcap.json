@@ -1,13 +1,19 @@
 {
+  "schemaVersion": 1,
   "id": "sharpcap",
+  "wingetId": "AstroStack.SharpCap",
   "kind": "Application",
   "module": "secondary-capture",
+  "allowlistDomains": ["www.sharpcap.co.uk", "sharpcap.co.uk"],
+  "requiresAuth": true,
   "displayName": "SharpCap 4.1 (64 bit)",
   "versionSource": "DisplayVersion",
   "expectedVersion": "4.1.14310",
+  "availableVersion": null,
   "downloadUrl": null,
   "downloadFileName": "SharpCapInstall-4.1.14310.0-64bit.exe",
+  "sha256": null,
   "silentInstallArgs": ["/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART"],
   "verified": false,
-  "notes": "Download page is behind Cloudflare bot-check; no scriptable direct URL confirmed. Populate the DownloadsRoot\\Applications cache manually, or update Update-Manifest.ps1 if a stable link is found."
+  "notes": "Download page is behind Cloudflare bot-check; no scriptable direct URL confirmed. wgfetch should report this target as blocked until an authenticated acquisition path is deliberately configured."
 }

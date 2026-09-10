@@ -24,7 +24,8 @@ AstroStack DSC audits and maintains the applications, datasets, drivers, plugins
 - `scripts/Generate-DscConfig.ps1` regenerates module and aggregate configuration documents.
 - `scripts/Test-Compliance.ps1` prepares DSC resource discovery, regenerates the configuration, and runs the complete compliance check.
 
-Package caches are not part of the repository. A caller-supplied `DownloadsRoot` is required for remediation.
+Package caches are not part of the repository. Remediation consumes wgfetch's explicit
+PackageIdentifier-to-path artifact map through `ArtifactMapPath`; it never assumes a cache layout.
 
 ## Compliance check
 
@@ -48,6 +49,51 @@ The aggregate check currently takes several minutes because every `Microsoft.DSC
 - installer and dataset remediation when a verified URL, checksum, and silent install command are available.
 
 Application-internal settings are not yet managed. Those will use specialized resources for each independently managed configuration format, with explicit dependencies on required applications, datasets, and paths.
+
+## wgfetch contract
+
+Each component uses `schemaVersion: 1` and records both identities:
+
+- `id` is AstroStack's stable lowercase slug.
+- `wingetId` is wgfetch/local-winget's `PackageIdentifier`.
+
+`expectedVersion` is a human-controlled compliance pin. wgfetch reports discovered releases in
+`availableVersion`; it must never advance `expectedVersion`.
+
+Field ownership is strict:
+
+| Owner | Fields |
+|---|---|
+| wgfetch | `downloadUrl`, `downloadFileName`, `sha256`, `verified`, `availableVersion` |
+| Human | Every other field, including `expectedVersion`, `notes`, install behavior, module, and kind |
+
+Apply a schemaVersion 1 wgfetch export with:
+
+```powershell
+.\scripts\Merge-WgfetchPatch.ps1 -PatchPath <path-to-patch.json>
+```
+
+The merger joins on `wingetId` and copies only the five machine-owned fields, preserving investigative
+notes and all policy. A non-null `downloadUrl` requires a 64-character `sha256`, and its host must be in
+the component's human-owned `allowlistDomains`. `requiresAuth: true` marks acquisition boundaries such
+as SharpCap's protected download flow. It is consumed by wgfetch and does not prevent DSC from using
+an already acquired, mapped, checksum-matching local artifact.
+
+For remediation, wgfetch exports this path-map shape:
+
+```json
+{
+  "schemaVersion": 1,
+  "artifacts": {
+    "AstroStack.NINA": "installers/AstroStack.NINA/3.2.0.9001/NINASetupBundle.zip"
+  }
+}
+```
+
+Relative artifact paths resolve from the mapping file's directory. AstroStack verifies the component
+checksum before execution. Archives such as NINA's nested-installer ZIP remain byte-for-byte wgfetch
+artifacts; AstroStack does not extract or repack them, and remediation remains blocked until explicit
+nested-installer handling is implemented.
 
 ## Testing strategy
 

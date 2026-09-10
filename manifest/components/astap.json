@@ -1,15 +1,20 @@
 {
+  "schemaVersion": 1,
   "id": "astap",
-  "kind": "Dataset",
+  "wingetId": "AstroStack.ASTAP",
+  "kind": "Application",
   "module": "astap",
+  "allowlistDomains": ["sourceforge.net", "downloads.sourceforge.net"],
   "displayName": "ASTAP",
   "versionSource": "InstallDate",
   "expectedVersion": "20260909",
+  "availableVersion": null,
   "checkPath": "C:\\Program Files\\astap\\astap.exe",
   "versionStrategy": "PathExists",
-  "downloadUrl": "https://sourceforge.net/projects/astap-program/files/windows_installer/astap_setup.exe/download",
+  "downloadUrl": null,
   "downloadFileName": "astap_setup.exe",
+  "sha256": null,
   "silentInstallArgs": ["/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART"],
-  "verified": true,
+  "verified": false,
   "notes": "ASTAP does not stamp a meaningful DisplayVersion/FileVersion, and astap.exe's file timestamps reflect the vendor's original build date, NOT the install date (confirmed via live testing: LastWriteTimeUtc showed 2026-09-03 even though it was reinstalled on 2026-09-09). Freshness is tracked via the registry Uninstall key's InstallDate field instead (set by Inno Setup, reliably reflects actual install date). KNOWN ISSUE: an orphaned duplicate ASTAP uninstall registry key from a 2024-03-29 install still exists alongside the current one (both named 'ASTAP') - detection sorts by InstallDate descending to always prefer the newest, but the stale key + its unins000.exe should be cleaned up manually."
 }

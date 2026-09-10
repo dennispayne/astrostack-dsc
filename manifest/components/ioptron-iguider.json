@@ -1,13 +1,18 @@
 {
+  "schemaVersion": 1,
   "id": "ioptron-iguider",
+  "wingetId": "AstroStack.iOptron.iGuider",
   "kind": "Application",
   "module": "guiding",
+  "allowlistDomains": ["www.ioptron.com"],
   "displayName": "iOptron iGuider ASCOM Driver 1.3.2.0",
   "versionSource": "DisplayVersion",
   "expectedVersion": "1.3.2.0",
-  "downloadUrl": "https://www.ioptron.com/v/ASCOM/iOptron_iGuider_ASCOM_Installer_1320.exe",
+  "availableVersion": null,
+  "downloadUrl": null,
   "downloadFileName": "iOptron_iGuider_ASCOM_Installer_1320.exe",
+  "sha256": null,
   "silentInstallArgs": ["/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART"],
-  "verified": true,
+  "verified": false,
   "notes": "Confirmed working - this exact URL was downloaded and installed successfully on 2026-09-09."
 }

@@ -1,12 +1,17 @@
 {
+  "schemaVersion": 1,
   "id": "ascom-qfoc-focuser",
+  "wingetId": "AstroStack.ASCOM.QFoc.Focuser",
   "kind": "Application",
   "module": "focuser",
+  "allowlistDomains": [],
   "displayName": "ASCOM qfoc Focuser Driver 24.08.28.13",
   "versionSource": "DisplayVersion",
   "expectedVersion": "24.08.28.13",
+  "availableVersion": null,
   "downloadUrl": null,
   "downloadFileName": "qfoc_Focuser_ASCOM.exe",
+  "sha256": null,
   "silentInstallArgs": null,
   "verified": false,
   "notes": "No confirmed direct URL found for this exact driver/version."

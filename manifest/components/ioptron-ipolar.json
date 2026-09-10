@@ -1,12 +1,17 @@
 {
+  "schemaVersion": 1,
   "id": "ioptron-ipolar",
+  "wingetId": "AstroStack.iOptron.iPolar",
   "kind": "Application",
   "module": "polar-alignment",
+  "allowlistDomains": ["www.ioptron.com"],
   "displayName": "iOptron iPolar 2.7.3.3",
   "versionSource": "DisplayVersion",
   "expectedVersion": "2.7.3.3",
+  "availableVersion": null,
   "downloadUrl": null,
   "downloadFileName": "iPolar.zip",
+  "sha256": null,
   "silentInstallArgs": null,
   "verified": false,
   "notes": "No static direct-download URL confirmed via HTTP fetch; installed version (2.7.3.3) is already newer than any publicly indexed version reference found. Low priority."
