@@ -118,6 +118,19 @@ GitHub Actions runs the same machine-independent checks on Windows with a five-m
 cancels superseded runs. The workflow intentionally omits CodeQL and the workstation-specific live
 compliance test.
 
+A separate **End-to-end** workflow installs DSC v3 and builds a disposable synthetic stack in the
+runner's temporary directory. It exercises:
+
+- `Microsoft.DSC/Include` composition;
+- an application with an explicit dependency on another application;
+- a NINA-style plugin set depending on its host application;
+- a file-backed dataset;
+- temporary per-user uninstall registry entries;
+- clean compliance, deliberate drift, and recovery.
+
+It does not download vendor installers, touch machine-wide registry state, connect to equipment, or
+attempt application-specific remediation.
+
 ## Contributing and support
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for safety and testing expectations. Use the issue forms for

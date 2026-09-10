@@ -26,6 +26,12 @@ Run the live compliance check only on a suitably configured Windows workstation:
 
 `dsc config set` can install software or alter application state. Use fixtures or a disposable VM before adding or changing remediation.
 
+For changes to DSC resource behavior, run the synthetic end-to-end harness when DSC v3 is installed:
+
+```powershell
+.\tests\e2e\Invoke-EndToEnd.ps1
+```
+
 ## Pull requests
 
 Keep pull requests focused. Explain the behavioral change, include Pester coverage for reusable logic, and note any hardware or process-safety constraints. Never commit package binaries, credentials, API keys, equipment serial numbers, or precise location data.
