@@ -1,0 +1,48 @@
+name: Bug report
+description: Report incorrect compliance, generation, or remediation behavior.
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please remove credentials, serial numbers, precise location data, and other private workstation details.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Include the command, expected behavior, and actual behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: component
+    attributes:
+      label: Affected component or resource
+      placeholder: AstroStack/Component, AstroStack/AstapConfig, NINA, PHD2...
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Sanitized output
+      description: Paste only the relevant error or compliance result.
+      render: text
+  - type: dropdown
+    id: operation
+    attributes:
+      label: Operation
+      options:
+        - Repository validation
+        - DSC Get/Test
+        - DSC Set/remediation
+        - Manifest generation or wgfetch merge
+        - Documentation
+        - Other
+    validations:
+      required: true
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety check
+      options:
+        - label: I removed secrets and private equipment/location data.
+          required: true

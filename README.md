@@ -3,6 +3,7 @@
   <h1>AstroStack DSC</h1>
   <p><strong>Keep an astrophotography workstation aligned, repeatable, and ready for clear skies.</strong></p>
   <p>
+    <a href="https://github.com/dennispayne/astrostack-dsc/actions/workflows/validate.yml"><img alt="Validation" src="https://github.com/dennispayne/astrostack-dsc/actions/workflows/validate.yml/badge.svg"></a>
     <img alt="DSC v3" src="https://img.shields.io/badge/DSC-v3-6366f1?style=flat-square">
     <img alt="PowerShell 7" src="https://img.shields.io/badge/PowerShell-7-2563eb?style=flat-square">
     <img alt="Platform Windows" src="https://img.shields.io/badge/platform-Windows-0891b2?style=flat-square">
@@ -110,8 +111,18 @@ Pester is appropriate for the PowerShell resource logic and generator. It does n
 Run the current unit tests with:
 
 ```powershell
-Invoke-Pester .\tests
+.\scripts\Test-Repository.ps1
 ```
+
+GitHub Actions runs the same machine-independent checks on Windows with a five-minute timeout and
+cancels superseded runs. The workflow intentionally omits CodeQL and the workstation-specific live
+compliance test.
+
+## Contributing and support
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for safety and testing expectations. Use the issue forms for
+bugs, feature requests, and questions. Security-sensitive reports belong in GitHub's private
+vulnerability reporting flow described in [SECURITY.md](SECURITY.md).
 
 ## Managed paths
 

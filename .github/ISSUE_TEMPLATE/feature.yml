@@ -1,0 +1,23 @@
+name: Feature request
+description: Propose a component, application-config resource, or workflow improvement.
+title: "[Feature]: "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or use case
+      description: What workflow or configuration gap should this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Describe the desired Get/Test/Set behavior and module ownership.
+    validations:
+      required: true
+  - type: textarea
+    id: safety
+    attributes:
+      label: Safety and testing considerations
+      description: Note hardware effects, running-process constraints, credentials, or audit-only boundaries.

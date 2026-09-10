@@ -1,0 +1,19 @@
+name: Question
+description: Ask about setup, manifests, DSC behavior, or supported equipment.
+title: "[Question]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This project models one real workstation first. Similar equipment may store configuration differently.
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Relevant context
+      description: Include versions and sanitized paths or output when useful.
